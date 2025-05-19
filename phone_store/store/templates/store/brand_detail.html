@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>{{ brand.name }}</h1>
+    {% if brand.logo %}
+        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="max-height: 100px;">
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for phone in phones %}
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            {% if phone.image %}
+            <img src="{{ phone.image.url }}" class="card-img-top" alt="{{ phone.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ phone.name }}</h5>
+                <p class="card-text">${{ phone.price }}</p>
+                <a href="{% url 'phone_detail' phone.id %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-center">No phones available for this brand.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

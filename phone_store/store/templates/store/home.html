@@ -1,0 +1,19 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h1>Welcome to Phone Store</h1>
+<div class="row">
+    {% for phone in featured_phones %}
+    <div class="col-md-3">
+        <div class="card">
+            <img src="{{ phone.image.url }}" class="card-img-top">
+            <div class="card-body">
+                <h5>{{ phone.brand.name }} {{ phone.name }}</h5>
+                <p>${{ phone.price }}</p>
+                <a href="{% url 'phone_detail' phone.id %}" class="btn btn-primary">View</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

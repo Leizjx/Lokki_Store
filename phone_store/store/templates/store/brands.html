@@ -1,0 +1,20 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h1>Our Brands</h1>
+<div class="row">
+    {% for brand in brands %}
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            {% if brand.logo %}
+            <img src="{{ brand.logo.url }}" class="card-img-top" alt="{{ brand.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ brand.name }}</h5>
+                <a href="{% url 'brand_detail' brand.id %}" class="btn btn-primary">View Phones</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
