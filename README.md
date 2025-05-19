@@ -1,99 +1,90 @@
 # LOKKI Phone Store
 
-A Django-based e-commerce website for selling mobile phones.
+Một website thương mại điện tử bán điện thoại di động được xây dựng bằng Django.
 
-## Features
+## Tính năng chính
 
-- **Product Management**
-  - Browse phones by brands
-  - Detailed product information
-  - Product search functionality
-  - Product images and specifications
+### Quản lý sản phẩm
+- Hiển thị sản phẩm theo thương hiệu
+- Tìm kiếm sản phẩm 
+- Xem chi tiết sản phẩm (thông số kỹ thuật, mô tả, giá)
+- Hình ảnh sản phẩm
 
-- **Shopping Cart**
-  - Add/remove items
-  - Update quantities
-  - View cart summary
-  - Free shipping for orders over $500
+### Giỏ hàng
+- Thêm/xóa sản phẩm
+- Cập nhật số lượng
+- Tính tổng tiền
+- Miễn phí vận chuyển cho đơn hàng trên $500
 
-- **User Management**
-  - User registration and authentication 
-  - Personal profile management
-  - Order history tracking
-  - Shopping cart persistence
+### Quản lý người dùng  
+- Đăng ký/đăng nhập
+- Quản lý thông tin cá nhân
+- Xem lịch sử đơn hàng
+- Lưu giỏ hàng theo user
 
-- **Checkout Process**
-  - Shipping information collection
-  - Multiple payment methods
-  - Order confirmation
-  - Order status tracking
+### Thanh toán
+- Thu thập thông tin giao hàng
+- Chọn phương thức thanh toán (COD/chuyển khoản)
+- Xác nhận đơn hàng
+- Theo dõi trạng thái đơn hàng
 
-## Installation
+## Cài đặt
 
-1. Clone the repository:
-```sh
-git clone <repository-url>
-cd phone_store
+1. Clone repository:
+```bash
+git clone https://github.com/your-username/lokki-phone-store.git
+cd lokki-phone-store
 ```
 
-2. Create and activate a virtual environment:
-```sh
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```sh
-pip install -r requirements.txt
-```
-
-4. Apply database migrations:
-```sh
+2. Thực hiện migrate:
+```bash
 python manage.py migrate
 ```
 
-5. Create a superuser:
-```sh
+3. Tạo tài khoản admin:
+```bash
 python manage.py createsuperuser
 ```
 
-6. Run the development server:
-```sh
+5.Cài Đặt Thư Viện Pillow
+pip install Pillow
+
+5. Chạy server:
+```bash
 python manage.py runserver
 ```
 
-## Project Structure
+## Cấu trúc thư mục
 
 ```
 phone_store/
 ├── manage.py
-├── media/
-│   ├── brands/      # Brand logos
-│   └── phones/      # Product images
-├── phone_store/     # Project settings
-└── store/           # Main application
-    ├── models.py    
-    ├── views.py
-    ├── urls.py
-    └── templates/   # HTML templates
+├── media/              # Media files
+│   ├── brands/        # Logo thương hiệu
+│   └── phones/        # Ảnh sản phẩm  
+├── phone_store/        # Cấu hình project
+└── store/              # App chính
+    ├── models.py       # Database models
+    ├── views.py       # Logic xử lý
+    ├── urls.py        # URL routing  
+    └── templates/     # HTML templates
 ```
 
-## Technologies Used
+## Công nghệ sử dụng
 
-- Django
-- Bootstrap 5
-- Font Awesome
-- SQLite3
-- HTML/CSS/JavaScript
+- **Backend**: Django 4.2
+- **Frontend**: 
+  - Bootstrap 5
+  - Font Awesome 5
+  - JavaScript
+- **Database**: SQLite
+- **Khác**: 
+  - Django Authentication
+  - Django Forms
+  - Django Messages
 
-## Contributing
+## Tác giả
+LOKKI Team
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Giấy phép
+MIT License
