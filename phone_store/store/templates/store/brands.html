@@ -1,20 +1,28 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<h1>Our Brands</h1>
-<div class="row">
-    {% for brand in brands %}
-    <div class="col-md-3 mb-4">
-        <div class="card">
-            {% if brand.logo %}
-            <img src="{{ brand.logo.url }}" class="card-img-top" alt="{{ brand.name }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ brand.name }}</h5>
-                <a href="{% url 'brand_detail' brand.id %}" class="btn btn-primary">View Phones</a>
+<div class="container my-5">
+    <h2 class="mb-4">Thương hiệu điện thoại</h2>
+    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for brand in brands %}
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center">
+                    {% if brand.logo %}
+                        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" 
+                             class="img-fluid mb-3" style="max-height: 100px;">
+                    {% endif %}
+                    <h4 class="card-title">{{ brand.name }}</h4>
+                    <p class="text-muted">{{ brand.phone_set.count }} sản phẩm</p>
+                    <a href="{% url 'brand_detail' brand.id %}" 
+                       class="btn btn-outline-primary">
+                        Xem sản phẩm
+                    </a>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

@@ -1,31 +1,92 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<div class="mb-4">
-    <h1>{{ brand.name }}</h1>
-    {% if brand.logo %}
-        <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" style="max-height: 100px;">
-    {% endif %}
-</div>
-
-<div class="row">
-    {% for phone in phones %}
-    <div class="col-md-3 mb-4">
-        <div class="card h-100">
-            {% if phone.image %}
-            <img src="{{ phone.image.url }}" class="card-img-top" alt="{{ phone.name }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ phone.name }}</h5>
-                <p class="card-text">${{ phone.price }}</p>
-                <a href="{% url 'phone_detail' phone.id %}" class="btn btn-primary">View Details</a>
+<div class="container my-5">
+    <!-- Brand Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'brands' %}">Thương hiệu</a></li>
+                    <li class="breadcrumb-item active">{{ brand.name }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if brand.logo %}
+                                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" 
+                                     class="img-fluid" style="max-height: 150px;">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <h1 class="mb-3">{{ brand.name }}</h1>
+                            <p class="lead mb-0">{{ brand.description }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    {% empty %}
-    <div class="col-12">
-        <p class="text-center">No phones available for this brand.</p>
+
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        {% for phone in phones %}
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                {% if phone.image %}
+                    <img src="{{ phone.image.url }}" class="card-img-top p-3" 
+                         alt="{{ phone.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ phone.name }}</h5>
+                    <p class="card-text text-primary fw-bold">${{ phone.price }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'phone_detail' phone.id %}" 
+                           class="btn btn-outline-primary">
+                            Chi tiết
+                        </a>
+                        <form method="POST" action="{% url 'add_to_cart' phone.id %}" 
+                              class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Chưa có sản phẩm nào thuộc thương hiệu này.
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
+
+<!-- Add these styles to your base.html or a separate CSS file -->
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #6c757d;
+}
+
+.breadcrumb a:hover {
+    color: #0d6efd;
+}
+</style>
 {% endblock %}

@@ -78,7 +78,13 @@ def brand_list(request):
 
 def brand_detail(request, brand_id):
     brand = get_object_or_404(Brand, pk=brand_id)
-    phones = brand.phone_set.all()
+    phones = brand.phone_set.all().order_by('-id')
+    
+    # Pagination
+    paginator = Paginator(phones, 12)
+    page = request.GET.get('page')
+    phones = paginator.get_page(page)
+    
     return render(request, 'store/brand_detail.html', {
         'brand': brand,
         'phones': phones
