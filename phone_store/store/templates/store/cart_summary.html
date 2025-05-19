@@ -1,0 +1,48 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>Giỏ hàng của bạn</h2>
+    {% if cart_items %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.phone.name }}</td>
+                        <td>${{ item.phone.price }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'update_cart_quantity' item.id %}" class="d-flex align-items-center">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 80px">
+                                <button type="submit" class="btn btn-sm btn-secondary ms-2">Cập nhật</button>
+                            </form>
+                        </td>
+                        <td>${{ item.phone.price|multiply:item.quantity }}</td>
+                        <td>
+                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Xóa</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end">
+            <h4>Tổng cộng: ${{ total_price }}</h4>
+            <a href="{% url 'checkout' %}" class="btn btn-primary">Tiến hành thanh toán</a>
+        </div>
+    {% else %}
+        <p>Giỏ hàng của bạn đang trống.</p>
+        <a href="{% url 'phone_list' %}" class="btn btn-primary">Tiếp tục mua sắm</a>
+    {% endif %}
+</div>
+{% endblock %}

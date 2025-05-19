@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 class Brand(models.Model):
     name = models.CharField(max_length=100)
     logo = models.ImageField(upload_to='brands/', blank=True)
@@ -20,9 +21,25 @@ class Phone(models.Model):
     
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    added_at = models.DateTimeField(auto_now_add=True)
+    phone = models.ForeignKey('Phone', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    date_added = models.DateTimeField(auto_now_add=True)
 
+    @property
     def total_price(self):
-        return self.phone.price * self.quantity
+        return self.quantity * self.phone.price
+
+    class Meta:
+        unique_together = ('user', 'phone')  # Ngăn duplicate items
+
+    def __str__(self):
+        return f"{self.user.username} - {self.phone.name}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, blank=True)
+    address = models.TextField(blank=True)
+    avatar = models.ImageField(upload_to='profiles/', blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"

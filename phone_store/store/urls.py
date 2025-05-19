@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('phones/', views.phone_list, name='phone_list'),
@@ -8,10 +8,15 @@ urlpatterns = [
     path('cart/', views.cart, name='cart'),
     path('add-to-cart/<int:phone_id>/', views.add_to_cart, name='add_to_cart'),
     path('remove-from-cart/<int:cart_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('update-cart-quantity/<int:cart_id>/', views.update_cart_quantity, name='update_cart_quantity'),
+    path('cart/summary/', views.cart_summary, name='cart_summary'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('checkout/confirm/', views.checkout_confirm, name='checkout_confirm'),
     path('brands/', views.brand_list, name='brands'),
     path('brands/<int:brand_id>/', views.brand_detail, name='brand_detail'),
     path('search/', views.search, name='search'),
-    path('login/', auth_views.LoginView.as_view(template_name='store/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
+    path('profile/', views.profile, name='profile'),
 ]

@@ -1,31 +1,147 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<h1>Your Cart</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Phone</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cart_items %}
-        <tr>
-            <td>{{ item.phone.name }}</td>
-            <td>${{ item.phone.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>${{ item.total_price }}</td>
-            <td>
-                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<h3>Total: ${{ total }}</h3>
-<a href="#" class="btn btn-primary">Checkout</a>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0">Giỏ hàng của bạn</h4>
+                </div>
+                <div class="card-body">
+                    {% if cart_items %}
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="100">Hình ảnh</th>
+                                        <th scope="col">Sản phẩm</th>
+                                        <th scope="col" class="text-center">Số lượng</th>
+                                        <th scope="col" class="text-end">Giá</th>
+                                        <th scope="col" class="text-end">Tổng</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart_items %}
+                                    <tr>
+                                        <td>
+                                            {% if item.phone.image %}
+                                            <img src="{{ item.phone.image.url }}" alt="{{ item.phone.name }}" 
+                                                 class="img-fluid rounded" style="max-width: 80px;">
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-0">{{ item.phone.name }}</h6>
+                                            <small class="text-muted">{{ item.phone.brand }}</small>
+                                        </td>
+                                        <td>
+                                            <div class="input-group justify-content-center" style="width: 120px;">
+                                                <form method="POST" action="{% url 'update_cart_quantity' item.id %}"
+                                                      class="d-flex">
+                                                    {% csrf_token %}
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                            onclick="decrementQuantity(this)">-</button>
+                                                    <input type="number" name="quantity" value="{{ item.quantity }}"
+                                                           class="form-control form-control-sm text-center"
+                                                           min="1" style="width: 50px;">
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                            onclick="incrementQuantity(this)">+</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">${{ item.phone.price }}</td>
+                                        <td class="text-end">${{ item.total_price }}</td>
+                                        <td class="text-end">
+                                            <a href="{% url 'remove_from_cart' item.id %}" 
+                                               class="btn btn-outline-danger btn-sm"
+                                               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <h5>Giỏ hàng của bạn đang trống</h5>
+                            <p class="text-muted">Hãy thêm sản phẩm vào giỏ hàng của bạn</p>
+                            <a href="{% url 'home' %}" class="btn btn-primary">
+                                <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if cart_items %}
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Tổng đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tạm tính</span>
+                        <span>${{ total }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Phí vận chuyển</span>
+                        <span class="text-success">Miễn phí</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Tổng cộng</strong>
+                        <strong class="text-primary">${{ total }}</strong>
+                    </div>
+                    <a href="{% url 'checkout' %}" class="btn btn-primary w-100">
+                        <i class="fas fa-lock me-2"></i>Tiến hành thanh toán
+                    </a>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-truck text-primary fa-2x me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Miễn phí vận chuyển</h6>
+                            <small class="text-muted">Cho đơn hàng từ $500</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-primary fa-2x me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Bảo mật thanh toán</h6>
+                            <small class="text-muted">100% an toàn</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function incrementQuantity(button) {
+    const input = button.previousElementSibling;
+    const newValue = parseInt(input.value) + 1;
+    input.value = newValue;
+    input.form.submit();
+}
+
+function decrementQuantity(button) {
+    const input = button.nextElementSibling;
+    const newValue = parseInt(input.value) - 1;
+    if (newValue >= 1) {
+        input.value = newValue;
+        input.form.submit();
+    }
+}
+</script>
 {% endblock %}
