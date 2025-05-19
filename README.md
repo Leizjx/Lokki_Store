@@ -46,8 +46,10 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-5.Cài Đặt Thư Viện Pillow
+4. Cài Đặt Pillow Chạy Sever
+```bash
 pip install Pillow
+```
 
 5. Chạy server:
 ```bash
