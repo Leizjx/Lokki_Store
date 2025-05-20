@@ -93,12 +93,14 @@ phone_store/
   - Django Messages
   - Django Forms
   - Pillow
+    
 ##Chức Năng Admin
  - Quản lý sản phẩm và thương hiệu
  - Xử lý đơn hàng 
  - Cập nhật trạng thái đơn hàng
  - Quản lý người dùng
  - Báo cáo doanh thu
+   
 ## Tác giả
 LOKKI Team(HPN)
 
