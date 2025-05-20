@@ -111,4 +111,5 @@ MIT License
 Email: lezidevwizard@gmail.com | Website: https://lokkiphone.com
 
 @Bản Quyền Thuộc Về Đội Ngũ Lokki Team
-##Không Copy dưới mọi hình thức!!!
+
+# @copyright: Không Copy dưới mọi hình thức!!! Do not Reup
