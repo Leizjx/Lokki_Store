@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm  # Thêm dòng này
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .models import Phone, Brand, Cart
+from .models import Phone, Brand, Cart, Order, OrderItem
 from django.core.paginator import Paginator
 
 def home(request):
@@ -153,29 +153,57 @@ def update_cart_quantity(request, cart_id):
         cart_item.save()
     return redirect('cart')
 
-@login_required
+@login_required 
 def cart_summary(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.phone.price * item.quantity for item in cart_items)
+    cart = Cart.objects.filter(user=request.user)
+    total = sum(item.total_price for item in cart)
     return render(request, 'store/cart_summary.html', {
-        'cart_items': cart_items,
-        'total_price': total_price
+        'cart': cart,
+        'total': total
     })
 
 @login_required
 def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.phone.price * item.quantity for item in cart_items)
+    if not cart_items.exists():
+        messages.warning(request, 'Giỏ hàng trống!')
+        return redirect('cart')
+        
+    total = sum(item.total_price for item in cart_items)
+        
+    if request.method == 'POST':
+        form_data = request.POST
+        order = Order.objects.create(
+            user=request.user,
+            full_name=form_data['full_name'],
+            phone=form_data['phone'],
+            address=form_data['address'],
+            payment_method=form_data['payment_method'],
+            order_note=form_data.get('order_note', ''),
+            total=total
+        )
+        
+        # Create order items
+        for cart_item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.phone,
+                quantity=cart_item.quantity, 
+                price=cart_item.phone.price
+            )
+            
+        # Clear cart
+        cart_items.delete()
+        
+        messages.success(request, 'Đặt hàng thành công!')
+        return redirect('order_complete', order_id=order.id)
+        
     return render(request, 'store/checkout.html', {
         'cart_items': cart_items,
-        'total_price': total_price
+        'total': total
     })
 
-@login_required 
-def checkout_confirm(request):
-    if request.method == 'POST':
-        # Xử lý thanh toán ở đây
-        cart_items = Cart.objects.filter(user=request.user)
-        cart_items.delete()  # Xóa giỏ hàng sau khi thanh toán
-        return redirect('checkout_success')
-    return redirect('checkout')
+@login_required
+def order_complete(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'store/order_complete.html', {'order': order})

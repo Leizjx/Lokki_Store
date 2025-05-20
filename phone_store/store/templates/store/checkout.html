@@ -1,62 +1,96 @@
 {% extends 'store/base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container my-5">
-    <h2>Thanh toán</h2>
+    <h2 class="mb-4">Thanh toán</h2>
+    
     <div class="row">
         <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4>Thông tin giao hàng</h4>
-                    <form method="POST" action="{% url 'checkout_confirm' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Họ và tên</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Địa chỉ</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="payment" class="form-label">Phương thức thanh toán</label>
-                            <select class="form-select" id="payment" name="payment" required>
-                                <option value="">Chọn phương thức thanh toán</option>
-                                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                                <option value="bank">Chuyển khoản ngân hàng</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Xác nhận đặt hàng</button>
-                    </form>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Họ tên</label>
+                    <input type="text" name="full_name" class="form-control" required>
                 </div>
-            </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ giao hàng</label>
+                    <textarea name="address" class="form-control" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Phương thức thanh toán</label>
+                    <select name="payment_method" id="payment_method" class="form-select" required>
+                        <option value="cod">Thanh toán khi nhận hàng</option>
+                        <option value="qr">Thanh toán QR Vietcombank</option>
+                    </select>
+                </div>
+
+                <!-- QR Payment Section -->
+                <div id="qr-section" class="mb-3" style="display: none;">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Quét mã QR để thanh toán</h5>
+                            <img src="{% static 'store/images/vietcombank_qr.png' %}" 
+                                 alt="Vietcombank QR Code" 
+                                 class="img-fluid mb-3" 
+                                 style="max-width: 300px;">
+                            <div class="alert alert-info">
+                                <strong>Thông tin chuyển khoản:</strong><br>
+                                Ngân hàng: Vietcombank<br>
+                                STK: 9335671851<br>
+                                Chủ TK: MAI NGOC PHUC<br>
+                                Nội dung: Thanh toan don hang #[Mã đơn hàng]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea name="order_note" class="form-control"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-3">Đặt hàng</button>
+            </form>
         </div>
+        
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h4>Đơn hàng của bạn</h4>
+                    <h5 class="card-title">Tổng đơn hàng</h5>
+                    <hr>
                     {% for item in cart_items %}
                     <div class="d-flex justify-content-between mb-2">
                         <span>{{ item.phone.name }} x {{ item.quantity }}</span>
-                        <span>${{ item.phone.price|multiply:item.quantity }}</span>
+                        <span>${{ item.total_price }}</span>
                     </div>
                     {% endfor %}
                     <hr>
                     <div class="d-flex justify-content-between">
                         <strong>Tổng cộng:</strong>
-                        <strong>${{ total_price }}</strong>
+                        <strong>${{ total }}</strong>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('payment_method').addEventListener('change', function() {
+    const qrSection = document.getElementById('qr-section');
+    if (this.value === 'qr') {
+        qrSection.style.display = 'block';
+    } else {
+        qrSection.style.display = 'none';
+    }
+});
+</script>
 {% endblock %}
