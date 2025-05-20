@@ -1,63 +1,48 @@
 {% extends 'store/base.html' %}
+{% load custom_filters %}
 
 {% block content %}
-<div class="container my-5">
+<div class="container py-5">
     <div class="row">
         <!-- Thông tin cá nhân -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h4 class="mb-0">Thông tin cá nhân</h4>
-                </div>
+        <div class="col-md-4">
+            <div class="card">
                 <div class="card-body">
-                    <form method="POST">
+                    <h4 class="card-title">Thông tin cá nhân</h4>
+                    <form method="post">
                         {% csrf_token %}
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="first_name" class="form-label">Họ</label>
-                                <input type="text" class="form-control" id="first_name" 
-                                       name="first_name" value="{{ user.first_name }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="last_name" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="last_name" 
-                                       name="last_name" value="{{ user.last_name }}">
-                            </div>
-                        </div>
-
                         <div class="mb-3">
-                            <label for="username" class="form-label">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="username" 
-                                   value="{{ user.username }}" readonly>
+                            <label class="form-label">Họ</label>
+                            <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
                         </div>
-
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" 
-                                   name="email" value="{{ user.email }}">
+                            <label class="form-label">Tên</label> 
+                            <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
                         </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Lưu thay đổi
-                        </button>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" name="phone_number" class="form-control" value="{{ user.profile.phone_number }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ</label>
+                            <textarea name="address" class="form-control">{{ user.profile.address }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                     </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Lịch sử đơn hàng -->
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-white">
-                    <h4 class="mb-0">Lịch sử đơn hàng</h4>
-                </div>
+        <!-- Lịch sử đơn hàng -->
+        <div class="col-md-8">
+            <div class="card">
                 <div class="card-body">
+                    <h4 class="card-title">Lịch sử đơn hàng</h4>
+                    {% if orders %}
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -66,69 +51,98 @@
                                     <th>Ngày đặt</th>
                                     <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
+                                    <th>Chi tiết</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% if orders %}
-                                    {% for order in orders %}
-                                    <tr>
-                                        <td>#{{ order.id }}</td>
-                                        <td>{{ order.created_at }}</td>
-                                        <td>${{ order.total_price }}</td>
-                                        <td>
-                                            <span class="badge bg-success">{{ order.status }}</span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        <td colspan="4" class="text-center">
-                                            Bạn chưa có đơn hàng nào
-                                        </td>
-                                    </tr>
-                                {% endif %}
+                                {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.created_at|date:"d-m-Y H:i" }}</td>
+                                    <td>${{ order.total }}</td>
+                                    <td>
+                                        {% if order.status == 'pending' %}
+                                            <span class="badge bg-warning">Đang chờ xử lý</span>
+                                        {% elif order.status == 'processing' %}
+                                            <span class="badge bg-primary">Đang xử lý</span>
+                                        {% elif order.status == 'shipped' %}
+                                            <span class="badge bg-info">Đang giao hàng</span>
+                                        {% elif order.status == 'completed' %}
+                                            <span class="badge bg-success">Đã giao hàng</span>
+                                        {% elif order.status == 'cancelled' %}
+                                            <span class="badge bg-danger">Đã hủy</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#orderModal{{ order.id }}">
+                                            Xem chi tiết
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-            <!-- Thống kê -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Thống kê</h5>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tổng đơn hàng</span>
-                        <span class="badge bg-primary">{{ orders.count }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span>Sản phẩm trong giỏ</span>
-                        <span class="badge bg-info">{{ cart_count }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Truy cập nhanh</h5>
-                    <div class="list-group">
-                        <a href="{% url 'cart' %}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-shopping-cart me-2"></i>Giỏ hàng
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action">
-                            <i class="fas fa-heart me-2"></i>Sản phẩm yêu thích
-                        </a>
-                        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                        </a>
-                    </div>
+                    {% else %}
+                    <p class="text-center">Bạn chưa có đơn hàng nào</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal chi tiết đơn hàng -->
+{% for order in orders %}
+<div class="modal fade" id="orderModal{{ order.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đơn hàng #{{ order.id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Người nhận:</strong> {{ order.full_name }}</p>
+                        <p><strong>Số điện thoại:</strong> {{ order.phone }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ order.address }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Ngày đặt:</strong> {{ order.created_at|date:"d-m-Y H:i" }}</p>
+                        <p><strong>Phương thức thanh toán:</strong> {{ order.get_payment_method_display }}</p>
+                        <p><strong>Trạng thái:</strong> {{ order.get_status_display }}</p>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.orderitem_set.all %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>${{ item.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.price|multiply:item.quantity }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
+                            <td><strong>${{ order.total }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}

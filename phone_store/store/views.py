@@ -1,3 +1,29 @@
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Order
+
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+@user_passes_test(is_admin)
+def admin_orders(request):
+    orders = Order.objects.all().order_by('-created_at')
+    return render(request, 'store/admin/orders.html', {'orders': orders})
+
+@user_passes_test(is_admin)
+def update_order_status(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        new_status = request.POST.get('status')
+        if new_status in dict(Order.STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+            messages.success(request, f'Đã cập nhật trạng thái đơn hàng #{order.id}')
+        else:
+            messages.error(request, 'Trạng thái không hợp lệ')
+    return redirect('admin_orders')
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm  # Thêm dòng này
@@ -132,17 +158,26 @@ def logout_view(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        # Update user information
+        # Handle profile update
         user = request.user
         user.first_name = request.POST.get('first_name', '')
         user.last_name = request.POST.get('last_name', '')
-        user.email = request.POST.get('email', '')
         user.save()
         
-        messages.success(request, 'Profile updated successfully!')
-        return redirect('profile')
+        profile = user.profile
+        profile.phone_number = request.POST.get('phone_number', '')
+        profile.address = request.POST.get('address', '')
+        profile.save()
         
-    return render(request, 'store/profile.html')
+        messages.success(request, 'Thông tin đã được cập nhật thành công!')
+        return redirect('profile')
+
+    # Get user's orders
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'store/profile.html', {
+        'orders': orders
+    })
 
 @login_required
 def update_cart_quantity(request, cart_id):

@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,8 +17,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Application definition
 
@@ -130,3 +132,8 @@ USE_L10N = False
 DATETIME_FORMAT = 'd-m-Y H:i'
 DATE_FORMAT = 'd-m-Y'
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
+
+# Thêm các cài đặt sau
+ADMIN_SITE_HEADER = "Quản lý cửa hàng điện thoại"
+ADMIN_SITE_TITLE = "Quản trị hệ thống"
+ADMIN_INDEX_TITLE = "Chức năng quản trị"
