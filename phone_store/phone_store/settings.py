@@ -124,3 +124,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Thêm vào cuối file
+USE_L10N = False
+DATETIME_FORMAT = 'd-m-Y H:i'
+DATE_FORMAT = 'd-m-Y'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
