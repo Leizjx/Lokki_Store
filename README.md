@@ -94,7 +94,7 @@ phone_store/
   - Django Forms
   - Pillow
     
-##Chức Năng Admin
+## Chức Năng Admin
  - Quản lý sản phẩm và thương hiệu
  - Xử lý đơn hàng 
  - Cập nhật trạng thái đơn hàng
@@ -107,7 +107,7 @@ LOKKI Team(HPN)
 ## Giấy phép
 MIT License
 
-##Liên Hệ
+# Liên Hệ
 Email: lezidevwizard@gmail.com | Website: https://lokkiphone.com
 
 @Bản Quyền Thuộc Về Đội Ngũ Lokki Team
