@@ -60,7 +60,7 @@ class Order(models.Model):
     def __str__(self):
         return f'Order {self.id}'
 
-class Profile(models.Model):  # Added back
+class Profile(models.Model):  
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15, blank=True)
     address = models.TextField(blank=True)
