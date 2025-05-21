@@ -5,11 +5,14 @@ set -o errexit
 # Install dependencies
 pip install -r requirements.txt
 
-# Add the project directory to PYTHONPATH
-export PYTHONPATH=$PYTHONPATH:$(pwd)/phone_store
+# Navigate to project directory
+cd phone_store
+
+# Set Python path
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 # Collect static files
-python phone_store/manage.py collectstatic --no-input
+python manage.py collectstatic --no-input
 
 # Run migrations
-python phone_store/manage.py migrate
+python manage.py migrate
