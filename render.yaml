@@ -3,7 +3,7 @@ services:
     name: phone-store
     env: python
     buildCommand: ./build.sh
-    startCommand: cd phone_store && gunicorn phone_store.wsgi:application
+    startCommand: gunicorn --chdir phone_store phone_store.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
@@ -12,6 +12,6 @@ services:
           name: phone_store
           property: connectionString
       - key: PYTHONPATH
-        value: .
+        value: phone_store
       - key: DJANGO_SETTINGS_MODULE
         value: phone_store.settings
