@@ -1,3 +1,4 @@
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -9,17 +10,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)u-i=0urz2wu72c37poukpakyri#2h_f$pm2wg4l@#@ssrv4cy'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-)u-i=0urz2wu72c37poukpakyri#2h_f$pm2wg4l@#@ssrv4cy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.render.com']
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+# Static files config
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Application definition
 
@@ -35,6 +39,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Thêm dòng này
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,12 +74,20 @@ WSGI_APPLICATION = 'phone_store.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'RENDER' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgresql://phone_store_user:k9ixLwj0g1f2GYD8exVOouWZIeynD2Yt@dpg-d0mp47muk2gs73frtqdg-a/phone_store',
+            conn_max_age=600
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -137,3 +150,5 @@ TIME_ZONE = 'Asia/Ho_Chi_Minh'
 ADMIN_SITE_HEADER = "Quản lý cửa hàng điện thoại"
 ADMIN_SITE_TITLE = "Quản trị hệ thống"
 ADMIN_INDEX_TITLE = "Chức năng quản trị"
+
+PYTHON_VERSION = "3.9.0"
