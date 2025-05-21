@@ -72,6 +72,13 @@ phone_store/
     └── templates/     # HTML templates
 ```
 
+# Models chính trong ứng dụng:
+- Phone: Thông tin điện thoại (tên, giá, mô tả, hình ảnh...)
+- Brand: Thương hiệu điện thoại
+- Cart: Giỏ hàng người dùng
+- Order: Đơn hàng
+- OrderItem: Chi tiết đơn hàng
+  
 ## Công nghệ sử dụng
 
 - **Backend**: Django 4.2
@@ -84,9 +91,25 @@ phone_store/
   - Django Authentication
   - Django Forms
   - Django Messages
-
+  - Django Forms
+  - Pillow
+    
+## Chức Năng Admin
+ - Quản lý sản phẩm và thương hiệu
+ - Xử lý đơn hàng 
+ - Cập nhật trạng thái đơn hàng
+ - Quản lý người dùng
+ - Báo cáo doanh thu
+   
 ## Tác giả
-LOKKI Team
+LOKKI Team(HPN)
 
 ## Giấy phép
 MIT License
+
+# Liên Hệ
+Email: lezidevwizard@gmail.com | Website: https://lokkiphone.com
+
+@Bản Quyền Thuộc Về Đội Ngũ Lokki Team
+
+# @copyright: Không Copy dưới mọi hình thức!!! Do not Reup
