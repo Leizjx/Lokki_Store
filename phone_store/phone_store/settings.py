@@ -152,3 +152,17 @@ ADMIN_SITE_TITLE = "Quản trị hệ thống"
 ADMIN_INDEX_TITLE = "Chức năng quản trị"
 
 PYTHON_VERSION = "3.9.0"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
