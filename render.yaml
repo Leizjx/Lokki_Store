@@ -3,7 +3,7 @@ services:
     name: phone-store
     env: python
     buildCommand: ./build.sh
-    startCommand: gunicorn phone_store.wsgi:application --bind 0.0.0.0:$PORT
+    startCommand: gunicorn phone_store.phone_store.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
