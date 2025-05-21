@@ -2,6 +2,8 @@ import dj_database_url
 from pathlib import Path
 import os
 import dj_database_url
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'phone_store.settings')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
