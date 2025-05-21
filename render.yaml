@@ -3,7 +3,7 @@ services:
     name: phone-store
     env: python
     buildCommand: ./build.sh
-    startCommand: gunicorn --chdir phone_store phone_store.wsgi:application
+    startCommand: cd phone_store && gunicorn phone_store.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
@@ -11,3 +11,5 @@ services:
         fromDatabase:
           name: phone_store
           property: connectionString
+      - key: PYTHONPATH
+        value: phone_store
