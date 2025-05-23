@@ -168,9 +168,14 @@
                                 {% endif %}
                             </a>
                             <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" 
+                                <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" 
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user me-1"></i>{{ user.username }}
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle me-2" style="width:32px; height:32px; object-fit:cover;">
+                                    {% else %}
+                                        <img src="{% static 'default-avatar.png' %}" alt="Avatar" class="rounded-circle me-2" style="width:32px; height:32px; object-fit:cover;">
+                                    {% endif %}
+                                    <span>{{ user.username }}</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="{% url 'profile' %}">

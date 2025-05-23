@@ -1,4 +1,5 @@
 {% extends 'store/base.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="container my-5">
@@ -6,7 +7,7 @@
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
-                    <h4 class="mb-0">Giỏ hàng của bạn</h4>
+                    <h4 class="mb-0">{% trans "Giỏ hàng của bạn" %}</h4>
                 </div>
                 <div class="card-body">
                     {% if cart_items %}
@@ -14,11 +15,11 @@
                             <table class="table align-middle">
                                 <thead>
                                     <tr>
-                                        <th scope="col" width="100">Hình ảnh</th>
-                                        <th scope="col">Sản phẩm</th>
-                                        <th scope="col" class="text-center">Số lượng</th>
-                                        <th scope="col" class="text-end">Giá</th>
-                                        <th scope="col" class="text-end">Tổng</th>
+                                        <th scope="col" width="100">{% trans "Hình ảnh" %}</th>
+                                        <th scope="col">{% trans "Sản phẩm" %}</th>
+                                        <th scope="col" class="text-center">{% trans "Số lượng" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Giá" %}</th>
+                                        <th scope="col" class="text-end">{% trans "Tổng" %}</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -67,10 +68,10 @@
                     {% else %}
                         <div class="text-center py-5">
                             <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                            <h5>Giỏ hàng của bạn đang trống</h5>
-                            <p class="text-muted">Hãy thêm sản phẩm vào giỏ hàng của bạn</p>
+                            <h5>{% trans "Giỏ hàng của bạn đang trống" %}</h5>
+                            <p class="text-muted">{% trans "Hãy thêm sản phẩm vào giỏ hàng của bạn" %}</p>
                             <a href="{% url 'home' %}" class="btn btn-primary">
-                                <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+                                <i class="fas fa-shopping-bag me-2"></i>{% trans "Tiếp tục mua sắm" %}
                             </a>
                         </div>
                     {% endif %}
@@ -82,24 +83,24 @@
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Tổng đơn hàng</h5>
+                    <h5 class="mb-0">{% trans "Tổng đơn hàng" %}</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Tạm tính</span>
+                        <span>{% trans "Tạm tính" %}</span>
                         <span>${{ total }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Phí vận chuyển</span>
-                        <span class="text-success">Miễn phí</span>
+                        <span>{% trans "Phí vận chuyển" %}</span>
+                        <span class="text-success">{% trans "Miễn phí" %}</span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between mb-4">
-                        <strong>Tổng cộng</strong>
+                        <strong>{% trans "Tổng cộng" %}</strong>
                         <strong class="text-primary">${{ total }}</strong>
                     </div>
                     <a href="{% url 'checkout' %}" class="btn btn-primary w-100">
-                        <i class="fas fa-lock me-2"></i>Tiến hành thanh toán
+                        <i class="fas fa-lock me-2"></i>{% trans "Tiến hành thanh toán" %}
                     </a>
                 </div>
             </div>
@@ -109,15 +110,15 @@
                     <div class="d-flex align-items-center mb-3">
                         <i class="fas fa-truck text-primary fa-2x me-3"></i>
                         <div>
-                            <h6 class="mb-0">Miễn phí vận chuyển</h6>
-                            <small class="text-muted">Cho đơn hàng từ $500</small>
+                            <h6 class="mb-0">{% trans "Miễn phí vận chuyển" %}</h6>
+                            <small class="text-muted">{% trans "Cho đơn hàng từ $500" %}</small>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="fas fa-shield-alt text-primary fa-2x me-3"></i>
                         <div>
-                            <h6 class="mb-0">Bảo mật thanh toán</h6>
-                            <small class="text-muted">100% an toàn</small>
+                            <h6 class="mb-0">{% trans "Bảo mật thanh toán" %}</h6>
+                            <small class="text-muted">{% trans "100% an toàn" %}</small>
                         </div>
                     </div>
                 </div>

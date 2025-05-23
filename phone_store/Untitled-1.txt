@@ -1,0 +1,5 @@
+{
+  "typescript.locale": "auto",
+  "files.defaultLanguage": "en"
+}
+```Bạn có thể thay đổi giá trị của các thiết lập này thành mã ngôn ngữ bạn muốn (ví dụ: "vi" cho tiếng Việt, "en" cho tiếng Anh, "fr" cho tiếng Pháp, v.v.).```

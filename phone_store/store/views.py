@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Order
+from .models import Order, Profile
 
 def is_admin(user):
     return user.is_superuser or user.is_staff
@@ -157,24 +157,25 @@ def logout_view(request):
 
 @login_required
 def profile(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+
     if request.method == 'POST':
-        # Handle profile update
-        user = request.user
         user.first_name = request.POST.get('first_name', '')
         user.last_name = request.POST.get('last_name', '')
         user.save()
-        
-        profile = user.profile
+
         profile.phone_number = request.POST.get('phone_number', '')
         profile.address = request.POST.get('address', '')
+        # Xử lý avatar
+        if request.FILES.get('avatar'):
+            profile.avatar = request.FILES['avatar']
         profile.save()
-        
+
         messages.success(request, 'Thông tin đã được cập nhật thành công!')
         return redirect('profile')
 
-    # Get user's orders
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    
     return render(request, 'store/profile.html', {
         'orders': orders
     })
