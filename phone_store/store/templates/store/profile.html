@@ -1,6 +1,7 @@
 {% extends 'store/base.html' %}
 {% load custom_filters %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <div class="container py-5">
@@ -16,34 +17,34 @@
                             <img src="{% static 'default-avatar.png' %}" alt="Avatar" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                         {% endif %}
                     </div>
-                    <h4 class="card-title">Thông tin cá nhân</h4>
+                    <h4 class="card-title">{% trans "Thông tin cá nhân" %}</h4>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label">Ảnh đại diện</label>
+                            <label class="form-label">{% trans "Ảnh đại diện" %}</label>
                             <input type="file" name="avatar" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Họ</label>
+                            <label class="form-label">{% trans "Họ" %}</label>
                             <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Tên</label>
+                            <label class="form-label">{% trans "Tên" %}</label>
                             <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
+                            <label class="form-label">{% trans "Email" %}</label>
                             <input type="email" class="form-control" value="{{ user.email }}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Số điện thoại</label>
+                            <label class="form-label">{% trans "Số điện thoại" %}</label>
                             <input type="text" name="phone_number" class="form-control" value="{{ user.profile.phone_number }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Địa chỉ</label>
+                            <label class="form-label">{% trans "Địa chỉ" %}</label>
                             <textarea name="address" class="form-control">{{ user.profile.address }}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        <button type="submit" class="btn btn-primary">{% trans "Lưu thay đổi" %}</button>
                     </form>
                 </div>
             </div>
@@ -53,17 +54,17 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Lịch sử đơn hàng</h4>
+                    <h4 class="card-title">{% trans "Lịch sử đơn hàng" %}</h4>
                     {% if orders %}
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th>Chi tiết</th>
+                                    <th>{% trans "Mã đơn hàng" %}</th>
+                                    <th>{% trans "Ngày đặt" %}</th>
+                                    <th>{% trans "Tổng tiền" %}</th>
+                                    <th>{% trans "Trạng thái" %}</th>
+                                    <th>{% trans "Chi tiết" %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -96,7 +97,7 @@
                         </table>
                     </div>
                     {% else %}
-                    <p class="text-center">Bạn chưa có đơn hàng nào</p>
+                    <p class="text-center">{% trans "Bạn chưa có đơn hàng nào" %}</p>
                     {% endif %}
                 </div>
             </div>
@@ -110,20 +111,20 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Chi tiết đơn hàng #{{ order.id }}</h5>
+                <h5 class="modal-title">{% trans "Chi tiết đơn hàng" %} #{{ order.id }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <p><strong>Người nhận:</strong> {{ order.full_name }}</p>
-                        <p><strong>Số điện thoại:</strong> {{ order.phone }}</p>
-                        <p><strong>Địa chỉ:</strong> {{ order.address }}</p>
+                        <p><strong>{% trans "Người nhận:" %}</strong> {{ order.full_name }}</p>
+                        <p><strong>{% trans "Số điện thoại:" %}</strong> {{ order.phone }}</p>
+                        <p><strong>{% trans "Địa chỉ:" %}</strong> {{ order.address }}</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Ngày đặt:</strong> {{ order.created_at|date:"d-m-Y H:i" }}</p>
-                        <p><strong>Phương thức thanh toán:</strong> {{ order.get_payment_method_display }}</p>
-                        <p><strong>Trạng thái:</strong> {{ order.get_status_display }}</p>
+                        <p><strong>{% trans "Ngày đặt:" %}</strong> {{ order.created_at|date:"d-m-Y H:i" }}</p>
+                        <p><strong>{% trans "Phương thức thanh toán:" %}</strong> {{ order.get_payment_method_display }}</p>
+                        <p><strong>{% trans "Trạng thái:" %}</strong> {{ order.get_status_display }}</p>
                     </div>
                 </div>
                 <table class="table">

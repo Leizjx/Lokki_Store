@@ -1,4 +1,5 @@
 {% extends 'store/base.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="container my-5">
@@ -35,23 +36,23 @@
                 <h5 class="mb-3">Thông số kỹ thuật:</h5>
                 <ul class="list-unstyled">
                     {% if phone.brand %}
-                        <li><i class="fas fa-mobile-alt me-2"></i> Thương hiệu: {{ phone.brand }}</li>
+                        <li><i class="fas fa-mobile-alt me-2"></i> {% trans "Thương hiệu:" %} {{ phone.brand }}</li>
                     {% endif %}
                     {% if phone.screen_size %}
-                        <li><i class="fas fa-expand me-2"></i> Màn hình: {{ phone.screen_size }}</li>
+                        <li><i class="fas fa-expand me-2"></i> {% trans "Màn hình:" %} {{ phone.screen_size }}</li>
                     {% endif %}
                     {% if phone.storage %}
-                        <li><i class="fas fa-memory me-2"></i> Bộ nhớ trong: {{ phone.storage }}GB</li>
+                        <li><i class="fas fa-memory me-2"></i> {% trans "Bộ nhớ trong:" %} {{ phone.storage }}GB</li>
                     {% endif %}
                     {% if phone.ram %}
-                        <li><i class="fas fa-microchip me-2"></i> RAM: {{ phone.ram }}GB</li>
+                        <li><i class="fas fa-microchip me-2"></i> {% trans "RAM:" %} {{ phone.ram }}GB</li>
                     {% endif %}
                 </ul>
             </div>
 
             <!-- Mô tả -->
             <div class="mb-4">
-                <h5>Mô tả sản phẩm:</h5>
+                <h5>{% trans "Mô tả sản phẩm:" %}</h5>
                 <p class="text-muted">{{ phone.description }}</p>
             </div>
 
@@ -64,7 +65,7 @@
                     <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity()">+</button>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ
+                    <i class="fas fa-shopping-cart me-2"></i>{% trans "Thêm vào giỏ" %}
                 </button>
             </form>
 
@@ -75,8 +76,8 @@
                         <div class="d-flex align-items-center">
                             <i class="fas fa-truck fs-4 text-primary me-2"></i>
                             <div>
-                                <h6 class="mb-0">Miễn phí vận chuyển</h6>
-                                <small class="text-muted">Cho đơn hàng từ $500</small>
+                                <h6 class="mb-0">{% trans "Miễn phí vận chuyển" %}</h6>
+                                <small class="text-muted">{% trans "Cho đơn hàng từ $500" %}</small>
                             </div>
                         </div>
                     </div>
@@ -84,8 +85,8 @@
                         <div class="d-flex align-items-center">
                             <i class="fas fa-shield-alt fs-4 text-primary me-2"></i>
                             <div>
-                                <h6 class="mb-0">Bảo hành 12 tháng</h6>
-                                <small class="text-muted">Đổi trả trong 30 ngày</small>
+                                <h6 class="mb-0">{% trans "Bảo hành 12 tháng" %}</h6>
+                                <small class="text-muted">{% trans "Đổi trả trong 30 ngày" %}</small>
                             </div>
                         </div>
                     </div>

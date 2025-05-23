@@ -126,6 +126,24 @@
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
         }
+
+        .form-select-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.2rem;
+        }
+
+        .form-select-sm.w-auto {
+            width: auto;
+        }
+
+        .navbar-auth .form-select {
+            margin-left: 1rem;
+        }
+
+        .navbar-auth .dropdown {
+            margin-right: 0;
+        }
     </style>
 </head>
 <body>
@@ -168,7 +186,7 @@
                                     <span class="cart-badge">{{ cart_count }}</span>
                                 {% endif %}
                             </a>
-                            <div class="dropdown">
+                            <div class="dropdown me-3">
                                 <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" 
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                     {% if user.profile.avatar %}
@@ -196,6 +214,15 @@
                                 <i class="fas fa-user-plus me-1"></i>Đăng ký
                             </a>
                         {% endif %}
+
+                        <!-- Form chọn ngôn ngữ -->
+                        <form method="post" action="{% url 'set_language' %}" class="d-flex align-items-center ms-3">
+                            {% csrf_token %}
+                            <select name="language" onchange="this.form.submit()" class="form-select form-select-sm w-auto">
+                                <option value="vi" {% if request.LANGUAGE_CODE == 'vi' %}selected{% endif %}>Tiếng Việt</option>
+                                <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>

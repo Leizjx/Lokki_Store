@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.i18n import set_language
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -23,4 +24,5 @@ urlpatterns = [
     path('admin/orders/', views.admin_orders, name='admin_orders'),
     path('admin/orders/<int:order_id>/update-status/', 
          views.update_order_status, name='update_order_status'),
+    path('set_language/', set_language, name='set_language'),
 ]

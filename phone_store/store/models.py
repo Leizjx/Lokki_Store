@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 class Brand(models.Model):
     name = models.CharField(max_length=100)
@@ -36,11 +37,11 @@ class Cart(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Đang chờ xử lý'),
-        ('processing', 'Đang xử lý'),
-        ('shipped', 'Đang giao hàng'),
-        ('completed', 'Đã giao hàng'),
-        ('cancelled', 'Đã hủy')
+        ('pending', _('Đang chờ xử lý')),
+        ('processing', _('Đang xử lý')),
+        ('shipped', _('Đang giao hàng')),
+        ('completed', _('Đã giao hàng')),
+        ('cancelled', _('Đã hủy')),
     ]
     
     PAYMENT_CHOICES = [
